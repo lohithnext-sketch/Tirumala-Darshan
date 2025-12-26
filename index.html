@@ -23,23 +23,23 @@
         .header-text { margin: 5px 0; color: #daa520; text-shadow: 0 4px 15px black; font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; }
         #status-text { color: #888; margin-bottom: 10px; font-size: 0.9rem; font-style: italic; }
 
-        /* 3D FRAME */
+        /* 3D FRAME - Adjusted to fit the specific image ratio better */
         #temple-frame {
             position: relative;
             width: 350px; 
-            height: 540px; /* Perfect Portrait Ratio */
+            height: 520px; 
             margin: 0 auto;
             border: 18px solid #1a1008;
             border-image: url('https://www.transparenttextures.com/patterns/black-scales.png') 20 stretch;
             background: #000;
             overflow: hidden; 
             perspective: 1100px; 
-            box-shadow: 0 0 100px rgba(0,0,0,1);
+            box-shadow: 0 0 100px rgba(0,0,0,1); /* Darker, wider shadow */
         }
 
         #corridor-rig { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
 
-        /* --- IDOL STYLING --- */
+        /* --- IDOL STYLING (FIXED TO FILL GAPS) --- */
         #idol-sanctum {
             position: absolute;
             width: 100%; 
@@ -47,25 +47,26 @@
             transform: translateZ(-1600px); 
             display: flex; 
             justify-content: center; 
-            align-items: flex-end; /* Align bottom */
+            align-items: center;
             z-index: 1;
-            /* Gold Aura behind the Lord */
-            background: radial-gradient(circle at 50% 30%, rgba(255, 215, 0, 0.4) 10%, #000 80%);
+            /* A subtle golden backlight behind the image */
+            box-shadow: inset 0 0 100px #000; 
+            background: #000;
         }
 
         #idol {
-            /* This makes the image fill the height perfectly */
+            /* THIS FIXES THE SIZE ISSUE */
             width: 100%;
             height: 100%;
             
-            /* 'Cover' ensures no black bars, fitting the frame exactly */
-            object-fit: cover;
+            /* 'Cover' forces the image to fill the frame, removing black bars */
+            object-fit: cover; 
             
-            /* Centers the idol so the crown (top) is visible */
-            object-position: top center; 
+            /* Ensures the Face/Crown is never cut off */
+            object-position: center top; 
             
-            /* Divine Glow & Gold Enhancement */
-            filter: contrast(1.15) saturate(1.2) drop-shadow(0 0 40px rgba(255, 200, 0, 0.6));
+            /* Divine Glow processing */
+            filter: contrast(1.1) saturate(1.2) drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
         }
 
         /* GATE LAYOUT */
@@ -75,7 +76,7 @@
             width: 50%; height: 100%;
             transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative; backface-visibility: hidden;
-            box-shadow: inset 0 0 80px rgba(0,0,0,0.95);
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.95); /* Deep shadows on doors */
         }
         .door.left { transform-origin: left; border-right: 2px solid rgba(0,0,0,0.8); }
         .door.right { transform-origin: right; border-left: 2px solid rgba(0,0,0,0.8); }
@@ -125,7 +126,8 @@
                 <div id="gates-wrapper"></div>
                 <div id="idol-sanctum">
                     <img id="idol" 
-                         src="https://upload.wikimedia.org/wikipedia/commons/8/82/Sri_Venkateswara_Swamy_Vari_Temple_Tirumala.jpg" 
+                         src="./idol.jpg" 
+                         onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/8/82/Sri_Venkateswara_Swamy_Vari_Temple_Tirumala.jpg';"
                          alt="Lord Venkateswara">
                 </div>
             </div>
@@ -187,7 +189,7 @@
         function giveHarati() {
             const idol = document.getElementById('idol');
             idol.style.filter = "brightness(2.5) contrast(1.2) drop-shadow(0 0 100px gold)";
-            setTimeout(() => { idol.style.filter = "contrast(1.15) saturate(1.2) drop-shadow(0 0 40px rgba(255, 200, 0, 0.6))"; }, 3000);
+            setTimeout(() => { idol.style.filter = "contrast(1.1) saturate(1.2) drop-shadow(0 0 30px rgba(255, 215, 0, 0.4))"; }, 3000);
         }
     </script>
 </body>
