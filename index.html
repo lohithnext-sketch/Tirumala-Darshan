@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Vari Saptha Dwaram Darshan</title>
+    <style>
+        :root {
+            --bg-color: #050202;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #ffd700;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .main-container { text-align: center; width: 100%; }
+        .header-text { margin: 5px 0; color: #daa520; text-shadow: 0 4px 15px black; font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; }
+        #status-text { color: #888; margin-bottom: 10px; font-size: 0.9rem; font-style: italic; }
+
+        /* 3D FRAME */
+        #temple-frame {
+            position: relative;
+            width: 340px;
+            height: 540px; /* Taller frame for the HD image */
+            margin: 0 auto;
+            border: 18px solid #1a1008;
+            border-image: url('https://www.transparenttextures.com/patterns/black-scales.png') 20 stretch;
+            background: #000;
+            overflow: hidden; 
+            perspective: 1100px; 
+            box-shadow: 0 0 80px rgba(0,0,0,1);
+        }
+
+        #corridor-rig {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        /* --- IDOL STYLING (CUSTOMIZED FOR YOUR HD IMAGE) --- */
+        #idol-sanctum {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(-1600px); 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Aligns base of idol to bottom */
+            /* Subtle aura behind the deity */
+            background: radial-gradient(circleAt bottom, rgba(255, 215, 0, 0.3) 0%, #000 70%);
+            z-index: 1;
+        }
+
+        #idol {
+            /* SIZING: Makes it big and fits perfectly */
+            height: 94%;  /* Very tall within the frame */
+            width: auto;  /* Adjusts width automatically based on height */
+            max-width: 98%; /* Ensures it never touches the side edges */
+            
+            /* Crucial: Ensures the whole image is visible without stretching */
+            object-fit: contain; 
+
+            /* STYLING: Adds divine glow and enhances the gold */
+            filter: contrast(1.1) saturate(1.1) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+            border-radius: 15px 15px 0 0; /* Soft rounded top */
+        }
+
+        /* GATE LAYOUT */
+        .gate-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            display: flex;
+            pointer-events: none;
+            top: 0; left: 0;
+        }
+
+        .door {
+            width: 50%;
+            height: 100%;
+            transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            backface-visibility: hidden;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.95);
+        }
+
+        .door.left { transform-origin: left; border-right: 2px solid rgba(0,0,0,0.8); }
+        .door.right { transform-origin: right; border-left: 2px solid rgba(0,0,0,0.8); }
+
+        .open-left { transform: rotateY(105deg); }
+        .open-right { transform: rotateY(-105deg); }
+
+
+        /* --- ANCIENT RING HANDLES --- */
+        .door::before {
+            content: '';
+            position: absolute;
+            top: 45%;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #8b4513, #3e1b05, #000);
+            border: 2px solid #1a0500;
+            box-shadow: 2px 5px 10px rgba(0,0,0,0.9);
+            z-index: 5;
+        }
+        .door::after {
+            content: '';
+            position: absolute;
+            top: 48%;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            border: 7px solid #4a2510;
+            background: transparent;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8), 2px 4px 5px rgba(0,0,0,0.8);
+            z-index: 6;
+            filter: brightness(0.8);
+        }
+        .door.left::before { right: 25px; } .door.right::before { left: 25px; }
+        .door.left::after { right: 22px; } .door.right::after { left: 22px; }
+
+
+        /* --- 7 ANCIENT GATE DESIGNS --- */
+        .gate-1 .door {
+            background-color: #1a0f05;
+            background-image: radial-gradient(circle, #5c3a1e 3px, transparent 4px), url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            background-size: 50px 50px, auto;
+            background-blend-mode: overlay;
+            border: 10px solid #0d0500;
+        }
+        .gate-2 .door {
+            background-color: #555;
+            background-image: radial-gradient(circle at center, transparent 40%, #222 90%), repeating-radial-gradient(circle, #888, #888 2px, #444 4px, #444 10px);
+            background-blend-mode: hard-light;
+            border: 6px ridge #777;
+            filter: contrast(1.3) grayscale(0.6);
+        }
+        .gate-3 .door {
+            background: linear-gradient(to bottom, #4b2e18, #2a1505);
+            background-image: url('https://www.transparenttextures.com/patterns/cracked-concrete.png');
+            background-blend-mode: multiply;
+            border: 5px solid #3e1b05;
+            box-shadow: inset 0 0 60px #1a0a00;
+        }
+        .gate-4 .door {
+            background-color: #222;
+            background-image: radial-gradient(#555 15%, transparent 16%), radial-gradient(#000 15%, transparent 16%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            border: 6px double #333;
+            filter: sepia(0.4);
+        }
+        .gate-5 .door {
+            background-color: #b8860b;
+            background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.3) 0px, rgba(0,0,0,0.3) 2px, transparent 2px, transparent 20px);
+            background-blend-mode: multiply;
+            border: 4px solid #8b4513;
+            filter: brightness(0.7) contrast(1.2);
+        }
+        .gate-6 .door {
+            background-color: #daa520;
+            background-image: linear-gradient(45deg, #b8860b 25%, transparent 25%, transparent 75%, #b8860b 75%, #b8860b), linear-gradient(45deg, #b8860b 25%, transparent 25%, transparent 75%, #b8860b 75%, #b8860b);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            box-shadow: inset 0 0 80px #3d2310;
+            border: 6px ridge #b8860b;
+        }
+        .gate-7 .door {
+            background: radial-gradient(circle, #ffd700, #b8860b);
+            background-image: conic-gradient(from 0deg, transparent 0deg 90deg, rgba(139,69,19,0.3) 90deg 180deg, transparent 180deg);
+            background-size: 40px 40px;
+            border: 10px double #ffcc00;
+            box-shadow: inset 0 0 100px #5c3010;
+            filter: contrast(1.2) sepia(0.4);
+        }
+
+        /* CONTROLS */
+        .controls {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 340px;
+            margin-left: auto; margin-right: auto;
+        }
+        button {
+            background: linear-gradient(#5c3010, #2a1505);
+            color: #daa520; 
+            border: 2px solid #8b4513;
+            padding: 12px; font-weight: bold; border-radius: 6px;
+            text-transform: uppercase; font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        button:disabled { background: #111; color: #444; border-color: #222; }
+
+        .flower { position: absolute; z-index: 100; pointer-events: none; animation: fall 4s linear forwards; font-size: 24px; opacity: 0.8; }
+        @keyframes fall { to { transform: translateY(500px) rotate(360deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <h1 class="header-text">Sri Vari Saptha Dwaram</h1>
+        <p id="status-text">Govinda! Govinda! Govinda!</p>
+
+        <iframe id="templeAudio" width="0" height="0" src="https://www.youtube.com/embed/6qfRFmMbOPI?enablejsapi=1" frameborder="0"></iframe>
+
+        <div id="temple-frame">
+            <div id="corridor-rig">
+                <div id="gates-wrapper"></div>
+                
+                <div id="idol-sanctum">
+                    <img id="idol" src="venkateswara_hd.jpg" alt="Lord Venkateswara Swamy">
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" onclick="startJourney()">🕉️ OPEN GATES</button>
+            <button id="flowerBtn" onclick="showerFlowers()" disabled>🌸 Pushpa Vrishti</button>
+            <button id="haratiBtn" onclick="giveHarati()" disabled>🕯️ Harati</button>
+        </div>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('gates-wrapper');
+        const totalGates = 7;
+        const gateSpacing = 200; 
+
+        // 1. Create 7 Gates
+        for (let i = 1; i <= totalGates; i++) {
+            const layer = document.createElement('div');
+            layer.className = `gate-layer gate-${i}`;
+            layer.style.zIndex = 100 - i;
+            layer.style.transform = `translateZ(${- (i-1) * gateSpacing}px)`; 
+            layer.innerHTML = `<div class="door left"></div><div class="door right"></div>`;
+            wrapper.appendChild(layer);
+        }
+
+        const gateNames = [
+            "Maha Dwaram (Studded Wood)",
+            "Vendi Vakili (Silver)",
+            "Dwajasthambha (Bronze)",
+            "Nadava (Iron)",
+            "Kulasekhara (Gold Plate)",
+            "Jaya-Vijaya (Carved Gold)",
+            "Bangaru Vakili (Sanctum Gate)"
+        ];
+
+        async function startJourney() {
+            // Try audio autoplay (might be blocked by browser until interaction)
+            try { document.getElementById('templeAudio').src += "&autoplay=1"; } catch(e) {}
+            
+            document.getElementById('startBtn').disabled = true;
+            const status = document.getElementById('status-text');
+            
+            const layers = document.querySelectorAll('.gate-layer');
+
+            for (let i = 0; i < totalGates; i++) {
+                status.innerText = `Passing: ${gateNames[i]}...`;
+                
+                // Open Current Gate
+                layers[i].querySelector('.left').classList.add('open-left');
+                layers[i].querySelector('.right').classList.add('open-right');
+
+                // Wait 2.5 seconds for heavy swing
+                await new Promise(r => setTimeout(r, 2500));
+            }
+
+            // Final Reveal
+            status.innerText = "Govinda! Govinda! Govinda!";
+            status.style.color = "#ffd700";
+            status.style.textShadow = "0 0 10px gold";
+            status.style.fontWeight = "bold";
+            
+            document.getElementById('flowerBtn').disabled = false;
+            document.getElementById('haratiBtn').disabled = false;
+        }
+
+        function showerFlowers() {
+            const frame = document.getElementById('temple-frame');
+            for(let i=0; i<30; i++) {
+                setTimeout(() => {
+                    const f = document.createElement('div');
+                    f.className = 'flower';
+                    f.innerText = ['🌸', '🌼', '🌺', '🌹'][Math.floor(Math.random()*4)];
+                    f.style.left = Math.random() * 90 + '%';
+                    f.style.top = '-20px';
+                    frame.appendChild(f);
+                    setTimeout(() => f.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        function giveHarati() {
+            const idol = document.getElementById('idol');
+            // Brighten and enhance glow
+            idol.style.filter = "brightness(1.3) contrast(1.3) saturate(1.5) drop-shadow(0 0 80px gold)";
+            // Return to normal after 3 seconds
+            setTimeout(() => { 
+                idol.style.filter = "contrast(1.1) saturate(1.1) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))"; 
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
